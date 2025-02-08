@@ -2,36 +2,39 @@ import Dice from "./Dice"
 import React from "react";
 
 export default function Main() {
-    function generateAllNewDice() {
-        let array=[];
-        for(let i=0;i<10;i++) {
-            let num=Math.ceil(Math.random() * 6);
-            array.push(num)
-        }
-        return array
+    const [diceComponent,setDiceComponent] = React.useState(
+        new Array(10).fill(null).map(()=> ({
+            num: Math.ceil(Math.random() * 6),
+            isHeld: false
+        }))
+    );
+    console.log(diceComponent);
+    function rollDice() {
+        setDiceComponent((prev)=> {
+            return prev.map((item)=> ({
+                num: Math.ceil(Math.random() * 6),
+                isHeld: item.isHeld
+            }))
+        })
     }
-    console.log(generateAllNewDice());
-    const [numbers, setNumbers]=React.useState(generateAllNewDice());
-
     return (
         <section className="main">
             <div className="col">
-                {numbers.filter((_,idx)=> idx < 5).map((item,idx)=> {
+                {diceComponent.filter((_,idx)=> idx <5).map((item,idx)=> {
                     return (
-                        <Dice key={idx} value={item} />
+                        <Dice key={idx} value={item.num} isHeld={item.isHeld}/>
                     )
                 })}
             </div>
             <div className="col">
-            {numbers.filter((_,idx)=> idx >= 5).map((item,idx)=> {
+                {diceComponent.filter((_,idx)=> idx >= 5).map((item,idx)=> {
                     return (
-                        <Dice key={idx} value={item} />
+                        <Dice key={idx} value={item.num} isHeld={item.isHeld}/>
                     )
                 })}
             </div>
-            <button onClick={()=> {
-                setNumbers(generateAllNewDice)
-            }}
+            <button 
+                onClick={rollDice}
                 className="roll">
                 ROLL
             </button>
