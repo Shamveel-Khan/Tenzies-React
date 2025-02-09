@@ -3,6 +3,9 @@ export default function Dice(props) {
         <span className={(props.isHeld)
                 ?"held-dice"
                 :"dice"
-        }>{props.value}</span>
+        }
+        onClick={()=> props.hold(props.id)}>
+            {props.value}
+        </span>
     )
 }

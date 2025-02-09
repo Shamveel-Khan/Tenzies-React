@@ -8,35 +8,82 @@ export default function Main() {
             isHeld: false
         }))
     );
-    console.log(diceComponent);
+    const [gameWon,setGameWon]=React.useState(false);
     function rollDice() {
-        setDiceComponent((prev)=> {
-            return prev.map((item)=> ({
-                num: Math.ceil(Math.random() * 6),
-                isHeld: item.isHeld
-            }))
-        })
+        if(gameWon) {
+            setGameWon(false);
+            setDiceComponent((prev)=> {
+                return prev.map((item,idx)=> {
+                    return {
+                        num:Math.ceil(Math.random() * 6),
+                        isHeld: false
+                    }
+                })
+            })
+        }
+        else {
+            setDiceComponent((prev)=> {
+                return prev.map((item)=> ({
+                    num: (item.isHeld)? item.num : Math.ceil(Math.random() * 6),
+                    isHeld: item.isHeld
+                }))
+            })
+        }
     }
+    
+    function hold(id) {
+        setDiceComponent((prev) =>
+            prev.map((item, idx) => 
+                idx === id ? { ...item, isHeld: !item.isHeld } : item
+            )
+        );
+    }
+    React.useEffect(()=> {
+        const allSameNum = diceComponent.every(die => die.num === diceComponent[0].num);
+        const allHeld = diceComponent.every(die => die.isHeld);
+    
+        if (allSameNum && allHeld) {
+            setGameWon(true)
+        }
+    },[diceComponent]);
     return (
         <section className="main">
             <div className="col">
                 {diceComponent.filter((_,idx)=> idx <5).map((item,idx)=> {
                     return (
-                        <Dice key={idx} value={item.num} isHeld={item.isHeld}/>
+                        <Dice 
+                            id={idx} 
+                            hold={hold} 
+                            key={idx} 
+                            value={item.num} 
+                            isHeld={item.isHeld}
+                            isWon={gameWon}
+                        />
                     )
                 })}
             </div>
             <div className="col">
                 {diceComponent.filter((_,idx)=> idx >= 5).map((item,idx)=> {
                     return (
-                        <Dice key={idx} value={item.num} isHeld={item.isHeld}/>
+                        <Dice 
+                            key={idx+5} 
+                            value={item.num} 
+                            isHeld={item.isHeld}
+                            id={idx+5}
+                            hold={hold}
+                            isWon={gameWon}
+                        />
                     )
                 })}
             </div>
             <button 
                 onClick={rollDice}
                 className="roll">
-                ROLL
+                {
+                    (gameWon)
+                    ?"New Game"
+                    :"Roll"
+                }
             </button>
         </section>
     )
