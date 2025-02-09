@@ -1,3 +1,4 @@
+import Confetti from "react-confetti";
 import Dice from "./Dice"
 import React from "react";
 
@@ -30,7 +31,7 @@ export default function Main() {
             })
         }
     }
-    
+
     function hold(id) {
         setDiceComponent((prev) =>
             prev.map((item, idx) => 
@@ -48,7 +49,18 @@ export default function Main() {
     },[diceComponent]);
     return (
         <section className="main">
-            <div className="col">
+            {gameWon && <Confetti />}
+            {
+                (gameWon)
+                ?<h1 className="header-h1">
+                    YOU WON!!
+                </h1>
+                :<>
+                <p className="description">
+                    Roll until all dices are the same click each die 
+                    to freeze it at its position 
+                </p>
+                <div className="col">
                 {diceComponent.filter((_,idx)=> idx <5).map((item,idx)=> {
                     return (
                         <Dice 
@@ -76,6 +88,8 @@ export default function Main() {
                     )
                 })}
             </div>
+            </>
+            }
             <button 
                 onClick={rollDice}
                 className="roll">
