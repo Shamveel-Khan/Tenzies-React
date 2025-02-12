@@ -219,6 +219,9 @@ body {
     width: 90%;
     left: -90%;
   }
+  .sidebar h2 {
+    margin-top: 20px;
+  }
   #about {
     padding: 5px;
   }
