@@ -31,7 +31,6 @@ export default function Main() {
             })
         }
     }
-
     function hold(id) {
         setDiceComponent((prev) =>
             prev.map((item, idx) => 
@@ -48,6 +47,7 @@ export default function Main() {
         }
     },[diceComponent]);
     return (
+        <>
         <section className="main">
             {gameWon && <Confetti />}
             {
@@ -100,5 +100,6 @@ export default function Main() {
                 }
             </button>
         </section>
+        </>
     )
 }
