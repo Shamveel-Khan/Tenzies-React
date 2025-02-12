@@ -225,6 +225,9 @@ body {
   #about {
     padding: 5px;
   }
+  #iconHolder {
+    padding: 10px 0;
+  }
 }
 
 @media (max-width: 760px) {
